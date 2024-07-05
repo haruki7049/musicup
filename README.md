@@ -1,2 +1,2 @@
 # musicup
-An server which can host your music files and compress &amp; publish your music files
+An server which can host your music files and compress & publish your music files
