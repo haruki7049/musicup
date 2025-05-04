@@ -1,0 +1,15 @@
+#include <argp.h>
+#include <stdlib.h>
+
+const char *argp_program_version = "Musicup 0.1.0";
+const char *argp_program_bug_address =
+    "https://github.com/haruki7049/musicup/issues";
+
+static char doc[] = "Musicup -- A server, hosts your music files and compresses & publishes your music files";
+
+static struct argp argp = {0, 0, 0, doc};
+
+int main(int argc, char **argv) {
+  argp_parse(&argp, argc, argv, 0, 0, 0);
+  exit(0);
+}
