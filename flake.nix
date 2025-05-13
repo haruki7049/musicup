@@ -1,6 +1,8 @@
 {
+  description = "A musicup's flake";
+
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     systems.url = "github:nix-systems/default";
     crane.url = "github:ipetkov/crane";
     flake-compat.url = "github:edolstra/flake-compat";
@@ -42,11 +44,19 @@
           cargoArtifacts = craneLib.buildDepsOnly {
             inherit src;
           };
+          cargo-build-targets = {
+            x86_64-linux.CARGO_BUILD_TARGET = "x86_64-unknown-linux-musl";
+            aarch64-linux.CARGO_BUILD_TARGET = "aarch64-unknown-linux-musl";
+            x86_64-darwin.CARGO_BUILD_TARGET = "x86_64-apple-darwin";
+            aarch64-darwin.CARGO_BUILD_TARGET = "aarch64-apple-darwin";
+          };
           musicup = craneLib.buildPackage {
             inherit src cargoArtifacts;
             strictDeps = true;
-
             doCheck = true;
+
+            inherit (cargo-build-targets."${system}") CARGO_BUILD_TARGET;
+            CARGO_BUILD_RUSTFLAGS = "-C target-feature=+crt-static";
           };
           cargo-clippy = craneLib.cargoClippy {
             inherit src cargoArtifacts;
