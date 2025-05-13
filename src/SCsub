@@ -1,9 +1,0 @@
-#!/usr/bin/env python3
-
-env = Environment()
-
-target = "musicup"
-sources = ["main.c"]
-god_bin = env.Program(target=target, source=sources)
-
-env.Install(source=god_bin)
