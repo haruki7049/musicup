@@ -1,3 +1,5 @@
+//! Web server
+
 use crate::{ADDRESS, Configuration};
 use axum::{Router, extract::Query, response::Html, routing::get};
 use serde::Deserialize;
