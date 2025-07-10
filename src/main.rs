@@ -1,31 +1,31 @@
-use axum::{Router, response::Html, routing::get};
+use clap::Parser;
+use musicup::{Configuration, database::setup_db, webserver::server};
+use std::path::PathBuf;
+use surrealdb::{Surreal, engine::local::Db};
 
 #[tokio::main]
-async fn main() -> anyhow::Result<()> {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // initialize tracing
-    let tracing_format = tracing_subscriber::fmt::format()
-        .with_level(true)
-        .with_target(false)
-        .with_thread_ids(false)
-        .with_thread_names(false)
-        .compact();
-    tracing_subscriber::fmt()
-        .event_format(tracing_format)
-        .init();
+    tracing_subscriber::fmt().init();
 
-    // build our application with a single route
-    let app = Router::new().route("/", get(root));
+    // Get Command-Line arguments
+    let args: CLIArgs = CLIArgs::parse();
 
-    // run our app with hyper, listening globally on port 3000
-    tracing::info!("Running at 0.0.0.0:3000...");
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
-    axum::serve(listener, app).await?;
+    // Get configuration
+    let config: Configuration = confy::load_path(args.config)?;
+
+    // Create a database
+    let db: Surreal<Db> = setup_db(&config).await?;
+
+    // Run the web application.
+    server(&config, db).await?;
 
     Ok(())
 }
 
-#[tracing::instrument]
-async fn root() -> Html<&'static str> {
-    tracing::info!("Accessed at root");
-    Html("<h1>Hello, World!</h1>")
+#[derive(Parser)]
+#[clap(version, about, author)]
+struct CLIArgs {
+    #[arg(short, long, default_value = confy::get_configuration_file_path("musicup", "musicup").expect("Failed to get default configuration path by confy crate").into_os_string())]
+    config: PathBuf,
 }
