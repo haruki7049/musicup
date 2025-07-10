@@ -1,6 +1,6 @@
 # How to use musicup
 
-このドキュメントは、簡単なmusicupの使用方法について書かれたものである。
+This documentation is written simply for how to use musicup.
 
 ## Installation
 
