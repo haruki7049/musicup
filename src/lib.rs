@@ -3,10 +3,10 @@
 pub mod database;
 pub mod webserver;
 
+use directories::{ProjectDirs, UserDirs};
 use serde::{Deserialize, Serialize};
 use std::net::{IpAddr, Ipv4Addr};
 use std::path::PathBuf;
-use directories::{UserDirs, ProjectDirs};
 
 /// Musicup configuration for Database and Web server.
 /// It is created by confy crate and your configuration file, such as `/home/haruki/.config/musicup/musicup.toml`.
@@ -25,7 +25,7 @@ impl std::default::Default for Configuration {
             Some(user_dirs) => match user_dirs.audio_dir() {
                 Some(path) => path.to_path_buf(),
                 None => PathBuf::new(),
-            }
+            },
             None => PathBuf::new(),
         };
 

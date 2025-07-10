@@ -1,10 +1,10 @@
 //! Archive
 //! This module contains some archivers to `tar`, `tar.gz`
 
+use crate::Configuration;
 use chrono::{DateTime, Local};
 use std::fs::File;
 use std::path::Path;
-use crate::Configuration;
 use zip::write::{SimpleFileOptions, ZipWriter};
 
 pub fn create_archive(config: &Configuration) -> Result<File, Box<dyn std::error::Error>> {
@@ -20,15 +20,18 @@ pub fn create_archive(config: &Configuration) -> Result<File, Box<dyn std::error
     let file: File = File::create(&path)?;
     let mut zip = ZipWriter::new(&file);
 
-    let options = SimpleFileOptions::default()
-        .compression_method(zip::CompressionMethod::Stored);
+    let options = SimpleFileOptions::default().compression_method(zip::CompressionMethod::Stored);
     add_file_recursive(&mut zip, &config.music_dir, options)?;
     zip.finish()?;
-    
+
     Ok(file)
 }
 
-fn add_file_recursive<P>(zip: &mut ZipWriter<&File>, path: P, options: SimpleFileOptions) -> Result<(), Box<dyn std::error::Error>>
+fn add_file_recursive<P>(
+    zip: &mut ZipWriter<&File>,
+    path: P,
+    options: SimpleFileOptions,
+) -> Result<(), Box<dyn std::error::Error>>
 where
     P: AsRef<Path>,
 {
