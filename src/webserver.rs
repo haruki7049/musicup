@@ -1,6 +1,6 @@
 //! Web server
 
-use crate::{ADDRESS, Configuration};
+use crate::Configuration;
 use axum::{Router, extract::Query, response::Html, routing::get};
 use serde::Deserialize;
 use surrealdb::{Surreal, engine::local::Db};
@@ -37,11 +37,14 @@ pub async fn server(
     config: &Configuration,
     database: Surreal<Db>,
 ) -> Result<(), Box<dyn std::error::Error>> {
+    // Generate address with port number
+    let address: String = format!("{}:{}", config.address, config.port);
+
     // build our application with a single route
     let app = Router::new().route("/", get(root));
 
-    tracing::info!("Running at http://{}...", ADDRESS);
-    let listener = tokio::net::TcpListener::bind(ADDRESS).await?;
+    tracing::info!("Running at http://{}...", address);
+    let listener = tokio::net::TcpListener::bind(address).await?;
     axum::serve(listener, app).await?;
 
     Ok(())
