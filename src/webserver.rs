@@ -1,6 +1,6 @@
 use crate::{ADDRESS, Configuration};
-use serde::Deserialize;
 use axum::{Router, extract::Query, response::Html, routing::get};
+use serde::Deserialize;
 use surrealdb::{Surreal, engine::local::Db};
 
 /// URL Query for Musicup

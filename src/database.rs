@@ -1,4 +1,3 @@
-
 use surrealdb::{
     Surreal,
     engine::local::{Db, Mem},
