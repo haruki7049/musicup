@@ -1,7 +1,6 @@
 use clap::Parser;
-use musicup::{Configuration, database::setup_db, webserver::server};
+use musicup::{Configuration, webserver::server};
 use std::path::PathBuf;
-use surrealdb::{Surreal, engine::local::Db};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -14,11 +13,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Get configuration
     let config: Configuration = confy::load_path(args.config)?;
 
-    // Create a database
-    let db: Surreal<Db> = setup_db(&config).await?;
-
     // Run the web application.
-    server(&config, db).await?;
+    server(&config).await?;
 
     Ok(())
 }

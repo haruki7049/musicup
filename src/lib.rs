@@ -1,6 +1,6 @@
 //! Musicup
 
-pub mod database;
+pub mod archive;
 pub mod webserver;
 
 use directories::{ProjectDirs, UserDirs};
