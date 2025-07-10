@@ -52,7 +52,7 @@ pub async fn server(
 async fn root(request: Query<MusicupRequest>) -> Html<String> {
     tracing::info!("Accessing...");
     let message: String = format!(
-        "<h1>Hello, World!</h1><p>Selected file extension is: {}</p>",
+        "<h1>Welcome to Musicup!!</h1><p>Selected file extension is: {}</p>",
         request.extension
     );
     Html(message)
